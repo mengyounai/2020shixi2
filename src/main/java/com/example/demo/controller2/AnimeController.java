@@ -1,15 +1,12 @@
 package com.example.demo.controller2;
 
 import com.example.demo.VO.AnimeVO;
+import com.example.demo.VO.CommentVO;
 import com.example.demo.VO.RateVO;
-import com.example.demo.dataobject.AnimeInfo;
-import com.example.demo.dataobject.Collection;
-import com.example.demo.dataobject.Score;
+import com.example.demo.dataobject.*;
 import com.example.demo.reposipory.AnimeInfoRepository;
 import com.example.demo.reposipory.ScoreRepository;
-import com.example.demo.service.AnimeService;
-import com.example.demo.service.CollectionService;
-import com.example.demo.service.ScoreService;
+import com.example.demo.service.*;
 import io.swagger.annotations.Api;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +37,12 @@ public class AnimeController {
 
     @Autowired
     private CollectionService collectionService;
+
+    @Autowired
+    private CommentService commentService;
+
+    @Autowired
+    private PeopleService peopleService;
 
     @GetMapping("/list")
     public List<AnimeVO> list(){
@@ -86,6 +89,19 @@ public class AnimeController {
         List<Integer> timeAll=animeService.timeAll();
         Collections.sort(timeAll);
         return timeAll;
+    }
+
+    @RequestMapping("/people")
+    @ResponseBody
+    public List<PeopleInfo> peopleAll(@RequestBody Map<String, Object> info){
+
+        String animeId= info.get("animeId").toString();
+
+        Integer animeId2=Integer.parseInt(animeId);
+        List<PeopleInfo> peopleInfoList=peopleService.peopleAll(animeId2);
+
+        return peopleInfoList;
+
     }
 
 
@@ -177,6 +193,17 @@ public class AnimeController {
         return animeVO;
     }
 
+    @RequestMapping("/discuss")
+    @ResponseBody
+    public List<CommentVO> commentVOList(@RequestBody Map<String, Object> info){
+
+        String animeId= info.get("animeId").toString();
+        Integer animeId2=Integer.parseInt(animeId);
+
+        List<CommentVO> commentVOList=commentService.animeAll2(animeId2);
+        return commentVOList;
+    }
+
     @RequestMapping("/collect")
     @ResponseBody
     public boolean collect(@RequestBody Map<String, Object> info){
@@ -190,12 +217,15 @@ public class AnimeController {
         String code= info.get("code").toString();
         Integer code2=Integer.parseInt(code);
 
+        String comment= info.get("comment").toString();
+
         collectionService.animecreate(userId2,code2,animeId2);
+
+        commentService.animecreate(userId2,animeId2,comment);
 
         return true;
 
     }
-
 
     @RequestMapping("/rate")
     @ResponseBody
@@ -224,8 +254,6 @@ public class AnimeController {
         double score2=Double.valueOf(score);
 
         Score score1=scoreService.animescore(animeId2,userId2,score2);
-
-
 
         return true;
 

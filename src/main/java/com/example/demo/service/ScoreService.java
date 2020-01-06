@@ -23,11 +23,32 @@ public interface ScoreService {
     //根据动画id评分
     Score animescore(Integer animeId,Integer userId,double score);
 
+
+    //书籍
+
     //根据书籍id查询书籍评分
     BookInfo findByBookId(Integer bookId);
 
+    //根据动画id给每个评分分类
+    RateVO scorelist2(Integer bookId);
+
+    //根据书籍id评分
+    Score bookscore(Integer bookId,Integer userId,double score);
+
+
+    //音乐
+
     //根据音乐id查询音乐评分
     MusicInfo findByMusicId(Integer musicId);
+
+    RateVO scorelist3(Integer musicId);
+
+    //根据音乐id评分
+    Score musicscore(Integer musicId,Integer userId,double score);
+
+
+
+
 
     //统计单个动漫评分
     double score(Integer animeId);

@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PeopleServiceImpl implements PeopleService {
 
@@ -26,5 +28,10 @@ public class PeopleServiceImpl implements PeopleService {
 
         Page<PeopleInfo> peopleInfoPage=respository.findAll(pageable);
         return peopleInfoPage;
+    }
+
+    @Override
+    public List<PeopleInfo> peopleAll(Integer animeId) {
+        return respository.findByAnimeId(animeId);
     }
 }

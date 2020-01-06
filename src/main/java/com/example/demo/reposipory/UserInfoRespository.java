@@ -8,4 +8,9 @@ import java.util.List;
 public interface UserInfoRespository extends JpaRepository<UserInfo,Integer> {
 
     public UserInfo findByUserEmailAndUserPassword(String userEmail,String userPassword);
+
+    //根据用户id查询用户
+    UserInfo findByUserId(Integer userId);
+
+
 }

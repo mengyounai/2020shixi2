@@ -20,7 +20,7 @@ public class CommentRepositoryTest {
     @Test
     public void save(){
         Comment comment=new Comment();
-        comment.setCommentId(10);
+        comment.setCommentId("10");
         comment.setUserId(1);
         comment.setCommentDescription("我永远喜欢我妻我乃");
         comment.setAnimeId(11);

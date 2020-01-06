@@ -106,7 +106,7 @@ public class CollectionServiceImplTest {
 
     @Test
     public void animecreate(){
-        collectionService.animecreate(2,0,11);
+        collectionService.animecreate(1,2,11);
     }
 
     @Test

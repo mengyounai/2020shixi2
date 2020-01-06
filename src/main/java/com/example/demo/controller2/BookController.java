@@ -1,12 +1,15 @@
 package com.example.demo.controller2;
 
 import com.example.demo.VO.BookVO;
+import com.example.demo.VO.CommentVO;
+import com.example.demo.VO.RateVO;
 import com.example.demo.dataobject.BookInfo;
 import com.example.demo.dataobject.Score;
 import com.example.demo.reposipory.BookInfoRepository;
 import com.example.demo.reposipory.ScoreRepository;
 import com.example.demo.service.BookService;
 import com.example.demo.service.CollectionService;
+import com.example.demo.service.CommentService;
 import com.example.demo.service.ScoreService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.BeanUtils;
@@ -38,6 +41,9 @@ public class BookController {
 
     @Autowired
     private CollectionService collectionService;
+
+    @Autowired
+    private CommentService commentService;
 
     @GetMapping("/list")
     public List<BookVO> list(){
@@ -169,6 +175,17 @@ public class BookController {
         return bookVO;
     }
 
+    @RequestMapping("/discuss")
+    @ResponseBody
+    public List<CommentVO> commentVOList(@RequestBody Map<String, Object> info){
+
+        String bookId= info.get("bookId").toString();
+        Integer bookId2=Integer.parseInt(bookId);
+
+        List<CommentVO> commentVOList=commentService.bookAll2(bookId2);
+        return commentVOList;
+    }
+
     @RequestMapping("/collect")
     @ResponseBody
     public boolean collect(@RequestBody Map<String, Object> info){
@@ -182,7 +199,43 @@ public class BookController {
         String code= info.get("code").toString();
         Integer code2=Integer.parseInt(code);
 
+        String comment= info.get("comment").toString();
+
         collectionService.bookcreate(userId2,code2,bookId2);
+
+        commentService.bookcreate(userId2,bookId2,comment);
+
+        return true;
+
+    }
+
+    @RequestMapping("/rate")
+    @ResponseBody
+    public RateVO rate(@RequestBody Map<String, Object> info){
+
+        String bookId= info.get("bookId").toString();
+        Integer bookId2=Integer.parseInt(bookId);
+
+        RateVO rateVO=scoreService.scorelist2(bookId2);
+
+        return rateVO;
+
+    }
+
+    @RequestMapping("/rateup")
+    @ResponseBody
+    public Boolean rateup(@RequestBody Map<String, Object> info){
+
+        String bookId= info.get("bookId").toString();
+        Integer bookId2=Integer.parseInt(bookId);
+
+        String userId= info.get("userId").toString();
+        Integer userId2=Integer.parseInt(userId);
+
+        String score= info.get("score").toString();
+        double score2=Double.valueOf(score);
+
+        Score score1=scoreService.bookscore(bookId2,userId2,score2);
 
         return true;
 

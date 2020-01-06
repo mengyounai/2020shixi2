@@ -117,7 +117,7 @@ public class AnimeServiceImpl implements AnimeService {
 
     @Override
     public List<AnimeInfo> findUpAll() {
-        return repository.findByAnimeStatus(0);
+        return repository.findByAnimeStatus(1);
     }
 
     @Override

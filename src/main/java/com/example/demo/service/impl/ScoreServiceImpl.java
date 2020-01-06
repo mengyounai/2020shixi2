@@ -107,13 +107,135 @@ public class ScoreServiceImpl implements ScoreService {
     }
 
     @Override
+    public Score bookscore(Integer bookId, Integer userId, double score) {
+        Score score1=new Score();
+
+        List<Score> scoreList=repository.findByBookId(bookId);
+
+        boolean a=true;
+
+        for (Score score2:scoreList){
+            if (userId==score2.getUserId()&&bookId==score2.getBookId()){
+                a=false;
+                score1=score2;
+                score1.setScore(score);
+
+            }
+        }
+        if (a){
+            score1.setScoreId(scoreId);
+            score1.setUserId(userId);
+            score1.setBookId(bookId);
+            score1.setScore(score);
+        }
+
+        repository.save(score1);
+
+        return score1;
+    }
+
+    @Override
+    public Score musicscore(Integer musicId, Integer userId, double score) {
+        Score score1=new Score();
+
+        List<Score> scoreList=repository.findByMusicId(musicId);
+
+        boolean a=true;
+
+        for (Score score2:scoreList){
+            if (userId==score2.getUserId()&&musicId==score2.getMusicId()){
+                a=false;
+                score1=score2;
+                score1.setScore(score);
+
+            }
+        }
+        if (a){
+            score1.setScoreId(scoreId);
+            score1.setUserId(userId);
+            score1.setMusicId(musicId);
+            score1.setScore(score);
+        }
+
+        repository.save(score1);
+
+        return score1;
+    }
+
+    @Override
     public BookInfo findByBookId(Integer bookId) {
         return null;
     }
 
     @Override
+    public RateVO scorelist2(Integer bookId) {
+        RateVO rateVO=new RateVO();
+
+        List<Score> scoreList=repository.findByBookId(bookId);
+
+        Integer sum1=0;
+        Integer sum2=0;
+        Integer sum3=0;
+        Integer sum4=0;
+        Integer sum5=0;
+        for (Score score:scoreList){
+            if (score.getScore()==0.5||score.getScore()==1){
+                sum1++;
+                rateVO.setCount1(sum1);
+            }else if (score.getScore()==1.5||score.getScore()==2){
+                sum2++;
+                rateVO.setCount2(sum2);
+            }
+            else if (score.getScore()==2.5||score.getScore()==3){
+                sum3++;
+                rateVO.setCount3(sum3);
+            }else if (score.getScore()==3.5||score.getScore()==4){
+                sum4++;
+                rateVO.setCount4(sum4);
+            }else {
+                sum5++;
+                rateVO.setCount5(sum5);
+            }
+        }
+        return rateVO;
+    }
+
+    @Override
     public MusicInfo findByMusicId(Integer musicId) {
         return null;
+    }
+
+    @Override
+    public RateVO scorelist3(Integer musicId) {
+        RateVO rateVO=new RateVO();
+
+        List<Score> scoreList=repository.findByMusicId(musicId);
+
+        Integer sum1=0;
+        Integer sum2=0;
+        Integer sum3=0;
+        Integer sum4=0;
+        Integer sum5=0;
+        for (Score score:scoreList){
+            if (score.getScore()==0.5||score.getScore()==1){
+                sum1++;
+                rateVO.setCount1(sum1);
+            }else if (score.getScore()==1.5||score.getScore()==2){
+                sum2++;
+                rateVO.setCount2(sum2);
+            }
+            else if (score.getScore()==2.5||score.getScore()==3){
+                sum3++;
+                rateVO.setCount3(sum3);
+            }else if (score.getScore()==3.5||score.getScore()==4){
+                sum4++;
+                rateVO.setCount4(sum4);
+            }else {
+                sum5++;
+                rateVO.setCount5(sum5);
+            }
+        }
+        return rateVO;
     }
 
     @Override

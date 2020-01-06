@@ -13,4 +13,9 @@ public interface UserService {
 
     //查询单个用户
     UserInfo findone(String userEmail, String userpassword);
+
+    //根据用户Id查询用户
+    UserInfo findbyuserId(Integer userId);
+
+
 }

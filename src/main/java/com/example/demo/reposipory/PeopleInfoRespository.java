@@ -7,5 +7,7 @@ import java.util.List;
 
 public interface PeopleInfoRespository extends JpaRepository<PeopleInfo,Integer> {
 
+    List<PeopleInfo> findByAnimeId(Integer animeId);
+
 
 }

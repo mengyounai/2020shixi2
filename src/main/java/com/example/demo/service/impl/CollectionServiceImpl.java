@@ -58,30 +58,30 @@ public class CollectionServiceImpl implements CollectionService {
     private BookInfoRepository bookInfoRepository;
 
 
-    String collectionId= KeyUtil.genUniquKey();
+    String collectionId = KeyUtil.genUniquKey();
 
     @Override
     public CollectionDTO create(CollectionDTO collectionDTO) {
 
 
-            for (Detail detail : collectionDTO.getDetailList()) {
-                AnimeInfo animeInfo = animeInfoRepository.getOne(detail.getAnimeId());
-                if (animeInfo == null) {
-                    throw new SellException(ResultEnum.PRODUCT_NOT_EXIST);
-                }
-
-                //收藏详情入库
-                BeanUtils.copyProperties(animeInfo, detail);
-                detail.setCollectionId(collectionId);
-                detail.setDetailId(KeyUtil.genUniquKey());
-
-                detailRepository.save(detail);
+        for (Detail detail : collectionDTO.getDetailList()) {
+            AnimeInfo animeInfo = animeInfoRepository.getOne(detail.getAnimeId());
+            if (animeInfo == null) {
+                throw new SellException(ResultEnum.PRODUCT_NOT_EXIST);
             }
+
+            //收藏详情入库
+            BeanUtils.copyProperties(animeInfo, detail);
+            detail.setCollectionId(collectionId);
+            detail.setDetailId(KeyUtil.genUniquKey());
+
+            detailRepository.save(detail);
+        }
 
 
         //将收藏信息入库
-        Collection collection=new Collection();
-        BeanUtils.copyProperties(collectionDTO,collection);
+        Collection collection = new Collection();
+        BeanUtils.copyProperties(collectionDTO, collection);
 //        if (!collection.getCollectionId().isEmpty()){
 //            collection.setCollectionId(collection.getCollectionId());
 //        }else {
@@ -114,8 +114,8 @@ public class CollectionServiceImpl implements CollectionService {
 
 
         //将收藏信息入库
-        Collection collection=new Collection();
-        BeanUtils.copyProperties(collectionDTO,collection);
+        Collection collection = new Collection();
+        BeanUtils.copyProperties(collectionDTO, collection);
 //        if (!collection.getCollectionId().isEmpty()){
 //            collection.setCollectionId(collection.getCollectionId());
 //        }else {
@@ -136,76 +136,69 @@ public class CollectionServiceImpl implements CollectionService {
     }
 
     @Override
-    public Collection animecreate(Integer userId,Integer code,Integer animeId) {
+    public Collection animecreate(Integer userId, Integer code, Integer animeId) {
 
-        List<Collection> collectionList=collectionRepository.findAll();
+        List<Collection> collectionList = collectionRepository.findAll();
 
-        List<Collection> animecollectList=new ArrayList<>();
+        List<Collection> animecollectList = new ArrayList<>();
 
-        for (Collection collection1:collectionList){
-            if (collection1.getAnimeId()!=null){
+        Collection collection = new Collection();
+
+        for (Collection collection1 : collectionList) {
+            if (collection1.getAnimeId() != null) {
                 animecollectList.add(collection1);
             }
         }
 
-        boolean a=true;
+        boolean a = true;
 
-        for (Collection collection1:animecollectList){
-            if (collection1.getUserId()==userId&&collection1.getAnimeId()==animeId){
-                a=false;
-                if (collection1.getCollectionStatus()!=code){
-                    collection1.setCollectionStatus(code);
-                    collectionRepository.save(collection1);
-                    return collection1;
-
-                }
-                else {
-                    return null;
-                }
+        for (Collection collection1 : animecollectList) {
+            if (collection1.getUserId() == userId && collection1.getAnimeId() == animeId) {
+                a = false;
+                collection = collection1;
+                collection.setCollectionStatus(code);
             }
         }
 
-        if (a){
-            Collection collection=new Collection();
+        if (a) {
             collection.setUserId(userId);
             collection.setAnimeId(animeId);
             collection.setCollectionStatus(code);
             collection.setCollectionId(collectionId);
-            collectionRepository.save(collection);
-            return collection;
         }
 
+        collectionRepository.save(collection);
 
-        return null;
+        return collection;
+
     }
 
     @Override
-    public Collection bookcreate(Integer userId,Integer code, Integer bookId) {
-        List<Collection> collectionList=collectionRepository.findAll();
+    public Collection bookcreate(Integer userId, Integer code, Integer bookId) {
+        List<Collection> collectionList = collectionRepository.findAll();
 
-        List<Collection> bookcollectList=new ArrayList<>();
+        List<Collection> bookcollectList = new ArrayList<>();
 
-        for (Collection collection1:collectionList){
-            if (collection1.getBookId()!=null){
+        for (Collection collection1 : collectionList) {
+            if (collection1.getBookId() != null) {
                 bookcollectList.add(collection1);
             }
         }
 
-        boolean a=true;
+        boolean a = true;
 
-        if (bookcollectList.size()==0){
+        if (bookcollectList.size() == 0) {
 
-        }else{
-            for (Collection collection1:bookcollectList){
-                if (collection1.getUserId()==userId&&collection1.getBookId()==bookId){
-                    a=false;
-                    if (collection1.getCollectionStatus()!=code){
+        } else {
+            for (Collection collection1 : bookcollectList) {
+                if (collection1.getUserId() == userId && collection1.getBookId() == bookId) {
+                    a = false;
+                    if (collection1.getCollectionStatus() != code) {
                         collection1.setCollectionStatus(code);
                         collectionRepository.save(collection1);
                         return collection1;
 
-                    }
-                    else {
+                    } else {
                         return null;
                     }
                 }
@@ -213,9 +206,8 @@ public class CollectionServiceImpl implements CollectionService {
         }
 
 
-
-        if (a){
-            Collection collection=new Collection();
+        if (a) {
+            Collection collection = new Collection();
             collection.setUserId(userId);
             collection.setBookId(bookId);
             collection.setCollectionStatus(code);
@@ -229,28 +221,27 @@ public class CollectionServiceImpl implements CollectionService {
     }
 
     @Override
-    public Collection musiccreate(Integer userId,Integer code, Integer musicId) {
-        List<Collection> collectionList=collectionRepository.findAll();
+    public Collection musiccreate(Integer userId, Integer code, Integer musicId) {
+        List<Collection> collectionList = collectionRepository.findAll();
 
-        boolean a=true;
+        boolean a = true;
 
-        for (Collection collection1:collectionList){
-            if (collection1.getUserId()==userId&&collection1.getMusicId()==musicId){
-                a=false;
-                if (collection1.getCollectionStatus()!=code){
+        for (Collection collection1 : collectionList) {
+            if (collection1.getUserId() == userId && collection1.getMusicId() == musicId) {
+                a = false;
+                if (collection1.getCollectionStatus() != code) {
                     collection1.setCollectionStatus(code);
                     collectionRepository.save(collection1);
                     return collection1;
 
-                }
-                else {
+                } else {
                     return null;
                 }
             }
         }
 
-        if (a){
-            Collection collection=new Collection();
+        if (a) {
+            Collection collection = new Collection();
             collection.setUserId(userId);
             collection.setMusicId(musicId);
             collection.setCollectionStatus(code);
@@ -267,11 +258,11 @@ public class CollectionServiceImpl implements CollectionService {
     public Page<CollectionDTO> findAll(Integer userId, Pageable pageable) {
 
 
-        Page<Collection> collectionPage=collectionRepository.findByUserId(userId,pageable);
+        Page<Collection> collectionPage = collectionRepository.findByUserId(userId, pageable);
 
-        List<CollectionDTO> collectionDTOList= Collection2CollectionDTOConveter.convert(collectionPage.getContent());
+        List<CollectionDTO> collectionDTOList = Collection2CollectionDTOConveter.convert(collectionPage.getContent());
 
-        return new PageImpl<CollectionDTO>(collectionDTOList,pageable,collectionPage.getTotalElements());
+        return new PageImpl<CollectionDTO>(collectionDTOList, pageable, collectionPage.getTotalElements());
 
 
     }
@@ -280,24 +271,23 @@ public class CollectionServiceImpl implements CollectionService {
     public CollectionDTO f(String collectionId) {
 
         //根据collectionId，从Collection表中查询数据
-        Collection collection=collectionRepository.findById(collectionId).orElse(null);
+        Collection collection = collectionRepository.findById(collectionId).orElse(null);
         if (collection == null) {
             throw new SellException(ResultEnum.COLLECTION_NOT_EXIST);
         }
 
         //根据收藏编号查询它的所有详情
-        List<Detail> detailList=detailRepository.findByCollectionId(collectionId);
-        if (CollectionUtils.isEmpty(detailList)){
+        List<Detail> detailList = detailRepository.findByCollectionId(collectionId);
+        if (CollectionUtils.isEmpty(detailList)) {
             throw new SellException(ResultEnum.COLLECTIONDETAIL_NOT_EXIST);
         }
 
         //数据拼装并返回
-        CollectionDTO collectionDTO=new CollectionDTO();
-        BeanUtils.copyProperties(collection,collectionDTO);
+        CollectionDTO collectionDTO = new CollectionDTO();
+        BeanUtils.copyProperties(collection, collectionDTO);
         collectionDTO.setDetailList(detailList);
 
         return collectionDTO;
-
 
 
     }
@@ -305,47 +295,47 @@ public class CollectionServiceImpl implements CollectionService {
     @Override
     public Page<CollectionDTO> findAnimeAll(Integer userId, Pageable pageable) {
 
-        Page<Collection> collectionPage=collectionRepository.findByUserId(userId,pageable);
+        Page<Collection> collectionPage = collectionRepository.findByUserId(userId, pageable);
 
-        List<CollectionDTO> collectionDTOList= Collection2CollectionDTOConveter.convert(collectionPage.getContent());
+        List<CollectionDTO> collectionDTOList = Collection2CollectionDTOConveter.convert(collectionPage.getContent());
 
-        List<CollectionDTO> collectionDTOList1=new ArrayList<>();
-        for (CollectionDTO collectionDTO:collectionDTOList){
-            if (collectionDTO.getAnimeId()!=null){
+        List<CollectionDTO> collectionDTOList1 = new ArrayList<>();
+        for (CollectionDTO collectionDTO : collectionDTOList) {
+            if (collectionDTO.getAnimeId() != null) {
                 collectionDTOList1.add(collectionService.f(collectionDTO.getCollectionId()));
             }
         }
-        return new PageImpl<CollectionDTO>(collectionDTOList1,pageable,collectionDTOList1.size());
+        return new PageImpl<CollectionDTO>(collectionDTOList1, pageable, collectionDTOList1.size());
     }
 
     @Override
     public Page<CollectionDTO> findBookAll(Integer userId, Pageable pageable) {
-        Page<Collection> collectionPage=collectionRepository.findByUserId(userId,pageable);
+        Page<Collection> collectionPage = collectionRepository.findByUserId(userId, pageable);
 
-        List<CollectionDTO> collectionDTOList= Collection2CollectionDTOConveter.convert(collectionPage.getContent());
+        List<CollectionDTO> collectionDTOList = Collection2CollectionDTOConveter.convert(collectionPage.getContent());
 
-        List<CollectionDTO> collectionDTOList1=new ArrayList<>();
-        for (CollectionDTO collectionDTO:collectionDTOList){
-            if (collectionDTO.getBookId()!=null){
+        List<CollectionDTO> collectionDTOList1 = new ArrayList<>();
+        for (CollectionDTO collectionDTO : collectionDTOList) {
+            if (collectionDTO.getBookId() != null) {
                 collectionDTOList1.add(collectionService.f(collectionDTO.getCollectionId()));
             }
         }
-        return new PageImpl<CollectionDTO>(collectionDTOList1,pageable,collectionDTOList1.size());
+        return new PageImpl<CollectionDTO>(collectionDTOList1, pageable, collectionDTOList1.size());
     }
 
     @Override
     public Page<CollectionDTO> findMusicAll(Integer userId, Pageable pageable) {
-        Page<Collection> collectionPage=collectionRepository.findByUserId(userId,pageable);
+        Page<Collection> collectionPage = collectionRepository.findByUserId(userId, pageable);
 
-        List<CollectionDTO> collectionDTOList= Collection2CollectionDTOConveter.convert(collectionPage.getContent());
+        List<CollectionDTO> collectionDTOList = Collection2CollectionDTOConveter.convert(collectionPage.getContent());
 
-        List<CollectionDTO> collectionDTOList1=new ArrayList<>();
-        for (CollectionDTO collectionDTO:collectionDTOList){
-            if (collectionDTO.getMusicId()!=null){
+        List<CollectionDTO> collectionDTOList1 = new ArrayList<>();
+        for (CollectionDTO collectionDTO : collectionDTOList) {
+            if (collectionDTO.getMusicId() != null) {
                 collectionDTOList1.add(collectionService.f(collectionDTO.getCollectionId()));
             }
         }
-        return new PageImpl<CollectionDTO>(collectionDTOList1,pageable,collectionDTOList1.size());
+        return new PageImpl<CollectionDTO>(collectionDTOList1, pageable, collectionDTOList1.size());
     }
 
     @Override
@@ -357,21 +347,21 @@ public class CollectionServiceImpl implements CollectionService {
     public CollectionDTO cancel(CollectionDTO collectionDTO) {
 
         //判断收藏状态
-        if (!collectionDTO.getCollectionStatus().equals(CollectEnum.FINISH.getCode())){
-            log.error("[取消收藏]收藏状态不正确,收藏ID={},收藏状态={}",collectionDTO.getCollectionId(),collectionDTO.getCollectionStatus());
+        if (!collectionDTO.getCollectionStatus().equals(CollectEnum.FINISH.getCode())) {
+            log.error("[取消收藏]收藏状态不正确,收藏ID={},收藏状态={}", collectionDTO.getCollectionId(), collectionDTO.getCollectionStatus());
             throw new SellException(ResultEnum.COLLECTION_STATUS_ERROR);
         }
 
         //修改收藏状态
-        Collection collection=new Collection();
+        Collection collection = new Collection();
 
         collectionDTO.setCollectionStatus(CollectEnum.New.getCode());
-        BeanUtils.copyProperties(collectionDTO,collection);
+        BeanUtils.copyProperties(collectionDTO, collection);
 
-        Collection updateResult=collectionRepository.save(collection);
+        Collection updateResult = collectionRepository.save(collection);
 
         if (updateResult == null) {
-            log.error("[取消收藏] 取消收藏失败,收藏={}",collection);
+            log.error("[取消收藏] 取消收藏失败,收藏={}", collection);
             throw new SellException(ResultEnum.COLLECTION_UPDATE_ERROR);
         }
 
@@ -381,11 +371,11 @@ public class CollectionServiceImpl implements CollectionService {
     @Override
     public Page<CollectionDTO> findList(Pageable pageable) {
 
-        Page<Collection> collectionPage=collectionRepository.findAll(pageable);
+        Page<Collection> collectionPage = collectionRepository.findAll(pageable);
 
-        List<CollectionDTO> collectionDTOList=Collection2CollectionDTOConveter.convert(collectionPage.getContent());
+        List<CollectionDTO> collectionDTOList = Collection2CollectionDTOConveter.convert(collectionPage.getContent());
 
-        Page<CollectionDTO> collectionDTOPage=new PageImpl<CollectionDTO>(collectionDTOList,pageable,collectionPage.getTotalElements());
+        Page<CollectionDTO> collectionDTOPage = new PageImpl<CollectionDTO>(collectionDTOList, pageable, collectionPage.getTotalElements());
 
         return collectionDTOPage;
     }
@@ -393,23 +383,23 @@ public class CollectionServiceImpl implements CollectionService {
     @Override
     public List<AnimeInfo> findByuserId(Integer userid, Pageable Pageable) {
 
-        Page<CollectionDTO> collectionDTOPage=collectionService.findAll(userid,Pageable);
+        Page<CollectionDTO> collectionDTOPage = collectionService.findAll(userid, Pageable);
 
         if (collectionDTOPage == null) {
-            log.error("[收藏为空] 查询收藏失败,收藏={}",collectionDTOPage);
+            log.error("[收藏为空] 查询收藏失败,收藏={}", collectionDTOPage);
             throw new SellException(ResultEnum.COLLECTION_INFO_EMPTY);
         }
 
-        List<AnimeInfo> animeInfoList=new ArrayList<>();
-        for (CollectionDTO collectionDTO:collectionDTOPage){
+        List<AnimeInfo> animeInfoList = new ArrayList<>();
+        for (CollectionDTO collectionDTO : collectionDTOPage) {
             if (collectionDTO.getAnimeId() != null) {
-            AnimeInfo animeInfo=animeService.findOne(collectionDTO.getAnimeId());
+                AnimeInfo animeInfo = animeService.findOne(collectionDTO.getAnimeId());
 
-              animeInfoList.add(animeInfo);
+                animeInfoList.add(animeInfo);
             }
         }
-        if (animeInfoList==null){
-            log.error("[动画列表为空] 查询失败,animeInfoList={}",animeInfoList);
+        if (animeInfoList == null) {
+            log.error("[动画列表为空] 查询失败,animeInfoList={}", animeInfoList);
             throw new SellException(ResultEnum.COLLECTION_INFO_EMPTY);
         }
 
@@ -418,23 +408,23 @@ public class CollectionServiceImpl implements CollectionService {
 
     @Override
     public List<BookInfo> findByuserId2(Integer userid, Pageable Pageable) {
-        Page<CollectionDTO> collectionDTOPage=collectionService.findAll(userid,Pageable);
+        Page<CollectionDTO> collectionDTOPage = collectionService.findAll(userid, Pageable);
 
         if (collectionDTOPage == null) {
-            log.error("[收藏为空] 查询收藏失败,收藏={}",collectionDTOPage);
+            log.error("[收藏为空] 查询收藏失败,收藏={}", collectionDTOPage);
             throw new SellException(ResultEnum.COLLECTION_INFO_EMPTY);
         }
 
-        List<BookInfo> bookInfoList=new ArrayList<>();
-        for (CollectionDTO collectionDTO:collectionDTOPage){
+        List<BookInfo> bookInfoList = new ArrayList<>();
+        for (CollectionDTO collectionDTO : collectionDTOPage) {
             if (collectionDTO.getBookId() != null) {
-                BookInfo bookInfo=bookService.findOne(collectionDTO.getBookId());
+                BookInfo bookInfo = bookService.findOne(collectionDTO.getBookId());
 
                 bookInfoList.add(bookInfo);
             }
         }
-        if (bookInfoList==null){
-            log.error("[动画列表为空] 查询失败,bookInfoList={}",bookInfoList);
+        if (bookInfoList == null) {
+            log.error("[动画列表为空] 查询失败,bookInfoList={}", bookInfoList);
             throw new SellException(ResultEnum.COLLECTION_INFO_EMPTY);
         }
 
@@ -443,23 +433,23 @@ public class CollectionServiceImpl implements CollectionService {
 
     @Override
     public List<MusicInfo> findByuserId3(Integer userid, Pageable Pageable) {
-        Page<CollectionDTO> collectionDTOPage=collectionService.findAll(userid,Pageable);
+        Page<CollectionDTO> collectionDTOPage = collectionService.findAll(userid, Pageable);
 
         if (collectionDTOPage == null) {
-            log.error("[收藏为空] 查询收藏失败,收藏={}",collectionDTOPage);
+            log.error("[收藏为空] 查询收藏失败,收藏={}", collectionDTOPage);
             throw new SellException(ResultEnum.COLLECTION_INFO_EMPTY);
         }
 
-        List<MusicInfo> musicInfoList=new ArrayList<>();
-        for (CollectionDTO collectionDTO:collectionDTOPage){
+        List<MusicInfo> musicInfoList = new ArrayList<>();
+        for (CollectionDTO collectionDTO : collectionDTOPage) {
             if (collectionDTO.getMusicId() != null) {
-                MusicInfo musicInfo=musicService.findOne(collectionDTO.getMusicId());
+                MusicInfo musicInfo = musicService.findOne(collectionDTO.getMusicId());
 
                 musicInfoList.add(musicInfo);
             }
         }
-        if (musicInfoList==null){
-            log.error("[动画列表为空] 查询失败,musicInfoList={}",musicInfoList);
+        if (musicInfoList == null) {
+            log.error("[动画列表为空] 查询失败,musicInfoList={}", musicInfoList);
             throw new SellException(ResultEnum.COLLECTION_INFO_EMPTY);
         }
 

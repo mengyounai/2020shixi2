@@ -1,23 +1,15 @@
-package com.example.demo.dataobject;
+package com.example.demo.VO;
 
 import com.example.demo.enums.ProductStatusEnum;
 import com.example.demo.util.Date2LongSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.Proxy;
 
-import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.Date;
 
-@Entity
-@Proxy(lazy = false)
 @Data
-@DynamicInsert
-@DynamicUpdate
-public class Comment {
+public class CommentVO {
 
     @Id
     private String commentId;
@@ -34,6 +26,10 @@ public class Comment {
 
     private Integer peopleId;
 
+    private String userName;
+
+    private String userIcon;
+
     private Integer commentStatus= ProductStatusEnum.UP.getCode();
 
     @JsonSerialize(using = Date2LongSerializer.class)
@@ -41,6 +37,4 @@ public class Comment {
 
     @JsonSerialize(using = Date2LongSerializer.class)
     private Date updateTime;
-
-
 }

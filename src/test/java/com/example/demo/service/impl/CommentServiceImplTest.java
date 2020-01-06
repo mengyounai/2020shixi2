@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.VO.CommentVO;
 import com.example.demo.dataobject.Comment;
 import com.example.demo.dto.AnimeDTO;
 import com.example.demo.reposipory.CommentRepository;
@@ -10,6 +11,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -31,7 +34,7 @@ public class CommentServiceImplTest {
         animeDTO.setAnimeId(10);
 
         Comment comment=new Comment();
-        comment.setCommentId(12);
+        comment.setCommentId("12");
         comment.setUserId(1);
         comment.setCommentDescription("我永远喜欢我妻由乃");
         comment.setCommentStatus(0);
@@ -52,6 +55,20 @@ public class CommentServiceImplTest {
     public void cancel() {
         Comment comment=commentService.cancel(1);
         log.info("[撤回评论] comment="+comment);
+        assertNotNull(comment);
+    }
+
+    @Test
+    public void discussAll() {
+        List<CommentVO> commentVOList=commentService.animeAll2(1);
+        log.info("[撤回评论] comment="+commentVOList);
+        assertNotNull(commentVOList);
+    }
+
+    @Test
+    public void animecreate() {
+        Comment comment=commentService.animecreate(2,1,"童年回忆");
+        log.info("[评论] comment="+comment);
         assertNotNull(comment);
     }
 

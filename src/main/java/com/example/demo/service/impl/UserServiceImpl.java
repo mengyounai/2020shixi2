@@ -23,6 +23,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserInfoRespository respository;
 
+    @Autowired
+    private UserService userService;
+
     private CollectionDTO checkCollectOwner(Integer userId,String collectId){
         CollectionDTO collectionDTO=collectionService.f(collectId);
         if (collectionDTO == null) {
@@ -55,5 +58,10 @@ public class UserServiceImpl implements UserService {
     public UserInfo findone(String userEmail, String userpassword) {
        UserInfo userInfo = respository.findByUserEmailAndUserPassword(userEmail,userpassword);
         return userInfo;
+    }
+
+    @Override
+    public UserInfo findbyuserId(Integer userId) {
+        return respository.findByUserId(userId);
     }
 }

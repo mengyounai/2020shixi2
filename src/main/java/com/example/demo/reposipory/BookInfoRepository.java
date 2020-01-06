@@ -19,7 +19,10 @@ public interface BookInfoRepository extends JpaRepository<BookInfo,Integer> {
 
 
     //根据书籍id查询书籍
-    List<BookInfo> findByBookId(Integer bookId);
+    List<BookInfo> findByBookId(String bookId);
+
+    //根据书籍id查询单个书籍
+    BookInfo findByBookId(Integer bookId);
 
     //根据书籍类型查询动画
     public List<BookInfo> findByLabelType(Integer labelTypeList);

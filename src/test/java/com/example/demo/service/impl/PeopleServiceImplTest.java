@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
+
 import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -32,5 +34,13 @@ public class PeopleServiceImplTest {
         Page<PeopleInfo> peopleInfoPage=peopleService.findAll(PageRequest.of(0,2));
         log.info("[用户数量为] number={}",peopleInfoPage.getTotalElements());
         assertNotNull(peopleInfoPage);
+    }
+
+    @Test
+    public void peopleAll(){
+        List<PeopleInfo> peopleInfoList=peopleService.peopleAll(11);
+        for (PeopleInfo peopleInfo:peopleInfoList){
+            System.out.println(peopleInfo.getPeopleName());
+        }
     }
 }

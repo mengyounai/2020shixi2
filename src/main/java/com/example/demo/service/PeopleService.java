@@ -15,4 +15,7 @@ public interface PeopleService {
     //查询所有人物
     Page<PeopleInfo> findAll(Pageable pageable);
 
+    //根据动漫Id查询所有人物
+    List<PeopleInfo> peopleAll(Integer animeId);
+
 }
