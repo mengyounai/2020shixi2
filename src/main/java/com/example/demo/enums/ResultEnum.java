@@ -19,6 +19,7 @@ public enum  ResultEnum {
     COLLECTIONDETAIL_NOT_EXIST(11,"收藏详情不存在"),
     COLLECTION_INFO_EMPTY(12,"收藏内容为空"),
     COLLECTION_UPDATE_SUCCESS(13,"收藏成功"),
+    Password(14,"修改密码失败")
 
 
 

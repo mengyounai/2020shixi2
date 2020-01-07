@@ -109,7 +109,7 @@ public class MusicServiceImpl implements MusicService {
 
     @Override
     public List<MusicInfo> findUpAll() {
-        return repository.findByMusicStatus(0);
+        return repository.findByMusicStatus(1);
     }
 
     @Override

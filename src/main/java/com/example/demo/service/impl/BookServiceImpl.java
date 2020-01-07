@@ -109,7 +109,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookInfo> findUpAll() {
-        return repository.findByBookStatus(0);
+        return repository.findByBookStatus(1);
     }
 
     @Override

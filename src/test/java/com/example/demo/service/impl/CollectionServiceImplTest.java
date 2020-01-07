@@ -1,8 +1,10 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.dataobject.AnimeInfo;
-import com.example.demo.dataobject.Collection;
-import com.example.demo.dataobject.Detail;
+import com.example.demo.VO.AnimeVO;
+import com.example.demo.VO.BookVO;
+import com.example.demo.VO.IndexVO;
+import com.example.demo.VO.MusicVO;
+import com.example.demo.dataobject.*;
 import com.example.demo.dto.CollectionDTO;
 import com.example.demo.enums.CollectEnum;
 import com.example.demo.service.AnimeService;
@@ -114,5 +116,21 @@ public class CollectionServiceImplTest {
         collectionService.bookcreate(1,2,3);
     }
 
+
+    @Test
+    public void collectAll(){
+        List<AnimeVO> animeInfoList=collectionService.animecollect(1);
+
+        List<BookVO> bookInfoList=collectionService.bookcollect(1);
+
+        List<MusicVO> musicInfoList=collectionService.musiccollect(1);
+
+        IndexVO indexVO=new IndexVO();
+
+
+        log.info("动漫的长度："+animeInfoList.size());
+        log.info("书籍的长度："+bookInfoList.size());
+        log.info("音乐的长度："+musicInfoList.size());
+    }
 
 }

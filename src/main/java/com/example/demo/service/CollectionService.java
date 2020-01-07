@@ -1,5 +1,8 @@
 package com.example.demo.service;
 
+import com.example.demo.VO.AnimeVO;
+import com.example.demo.VO.BookVO;
+import com.example.demo.VO.MusicVO;
 import com.example.demo.dataobject.*;
 import com.example.demo.dto.CollectionDTO;
 import org.springframework.data.domain.Page;
@@ -64,6 +67,17 @@ public interface CollectionService {
     //根据用户id查询收藏人物
     List<PeopleInfo> findByuserId4(Integer userid, Pageable Pageable);
 
+
+    //分割线
+
+    //查询单个用户所有动漫收藏
+    List<AnimeVO> animecollect(Integer userId);
+
+    //查询单个用户所有书籍收藏
+    List<BookVO> bookcollect(Integer userId);
+
+    //查询单个用户所有音乐收藏
+    List<MusicVO> musiccollect(Integer userId);
 
 
 

@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.dataobject.UserInfo;
+import com.example.demo.reposipory.UserInfoRespository;
 import com.example.demo.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -18,6 +19,9 @@ public class UserServiceImplTest {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserInfoRespository respository;
+
     @Test
     public void findCollectOne() {
     }
@@ -28,10 +32,19 @@ public class UserServiceImplTest {
 
     @Test
     public void findOne(){
+        UserInfo userInfo1=respository.findByUserId(1);
+        UserInfo userInfo=userService.findone("3223137@qq.com","111");
+        log.info("[用户名为] name={}",userInfo1.getUserName());
+        log.info("[邮箱为] name={}",userInfo1.getUserEmail());
+        log.info("[密码为] name={}",userInfo1.getUserPassword());
 
-        UserInfo userInfo=userService.findone("3223137@qq.com","222");
-        log.info("[用户名为] name={}",userInfo.getUserName());
-        assertNotNull(userInfo);
     }
+
+    @Test
+    public void uppass(){
+        userService.password(1,"3223137@qq.com","111","123456");
+    }
+
+
 
 }

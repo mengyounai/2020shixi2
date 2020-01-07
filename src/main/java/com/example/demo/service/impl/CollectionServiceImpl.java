@@ -1,5 +1,8 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.VO.AnimeVO;
+import com.example.demo.VO.BookVO;
+import com.example.demo.VO.MusicVO;
 import com.example.demo.conveter.Collection2CollectionDTOConveter;
 import com.example.demo.dataobject.*;
 import com.example.demo.dto.CollectionDTO;
@@ -26,6 +29,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.awt.print.Book;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -459,6 +463,66 @@ public class CollectionServiceImpl implements CollectionService {
     @Override
     public List<PeopleInfo> findByuserId4(Integer userid, Pageable Pageable) {
         return null;
+    }
+
+    @Override
+    public List<AnimeVO> animecollect(Integer userId) {
+
+        List<Collection> collectionList = collectionRepository.findByUserId(userId);
+
+        List<AnimeVO> animeVOList=new ArrayList<>();
+
+        for (Collection collection : collectionList) {
+            if (collection.getAnimeId() != null) {
+                AnimeVO animeVO=new AnimeVO();
+                AnimeInfo animeInfo = animeService.findOne(collection.getAnimeId());
+                BeanUtils.copyProperties(animeInfo,animeVO);
+                animeVO.setCollectStatus(collection.getCollectionStatus());
+                animeVOList.add(animeVO);
+            }
+        }
+
+        return animeVOList;
+    }
+
+    @Override
+    public List<BookVO> bookcollect(Integer userId) {
+        List<Collection> collectionList = collectionRepository.findByUserId(userId);
+
+        List<BookVO> bookVOList=new ArrayList<>();
+
+        for (Collection collection : collectionList) {
+            if (collection.getBookId() != null) {
+                BookVO bookVO=new BookVO();
+                BookInfo bookInfo = bookService.findOne(collection.getBookId());
+                BeanUtils.copyProperties(bookInfo,bookVO);
+                bookVO.setCollectStatus(collection.getCollectionStatus());
+                bookVOList.add(bookVO);
+
+            }
+        }
+
+        return bookVOList;
+    }
+
+    @Override
+    public List<MusicVO> musiccollect(Integer userId) {
+        List<Collection> collectionList = collectionRepository.findByUserId(userId);
+
+        List<MusicVO> musicVOList=new ArrayList<>();
+
+        for (Collection collection : collectionList) {
+            if (collection.getMusicId() != null) {
+                MusicVO musicVO=new MusicVO();
+                MusicInfo musicInfo = musicService.findOne(collection.getMusicId());
+                BeanUtils.copyProperties(musicInfo,musicVO);
+                musicVO.setCollectStatus(collection.getCollectionStatus());
+                musicVOList.add(musicVO);
+
+            }
+        }
+
+        return musicVOList;
     }
 
 

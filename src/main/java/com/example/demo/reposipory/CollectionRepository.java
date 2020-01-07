@@ -23,4 +23,15 @@ public interface CollectionRepository extends JpaRepository<Collection,String> {
 
     //根据人物id查询人物
     Page<PeopleInfo> findByPeopleId(Integer peopleId, Pageable Pageable);
+
+
+
+    //分割线
+
+    //根据用户id查询收藏
+    List<Collection> findByUserId(Integer userId);
+
+
+
+
 }

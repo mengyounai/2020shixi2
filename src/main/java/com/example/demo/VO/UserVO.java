@@ -1,20 +1,12 @@
-package com.example.demo.dataobject;
+package com.example.demo.VO;
 
 import lombok.Data;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.Proxy;
 
-import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.Date;
 
-@Entity
-@Proxy(lazy = false)
 @Data
-@DynamicInsert
-@DynamicUpdate
-public class UserInfo {
+public class UserVO {
 
     @Id
     private Integer userId;
@@ -22,10 +14,6 @@ public class UserInfo {
     private String userName;
 
     private Integer userSex;
-
-    private String userPassword;
-
-    private String userEmail;
 
     private String userPhone;
 
@@ -40,8 +28,5 @@ public class UserInfo {
     private Date createTime;
 
     private Date updateTime;
-
-
-
 
 }
