@@ -12,7 +12,11 @@ import java.util.List;
 
 public interface CollectionService {
 
-    //收藏动漫
+
+    // 查询所有收藏
+    List<Collection> collectAll();
+
+//    收藏动漫
     CollectionDTO create(CollectionDTO collectionDTO);
 
     //收藏书籍
@@ -29,6 +33,9 @@ public interface CollectionService {
 
     //收藏音乐
     Collection musiccreate(Integer userId,Integer code,Integer musicId);
+
+    //收藏人物
+    Collection peoplecreate(Integer userId,Integer code,Integer peopleId);
 
 
     //查询所有收藏

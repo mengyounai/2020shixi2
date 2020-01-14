@@ -65,6 +65,11 @@ public class CollectionServiceImpl implements CollectionService {
     String collectionId = KeyUtil.genUniquKey();
 
     @Override
+    public List<Collection> collectAll() {
+        return collectionRepository.findAll();
+    }
+
+    @Override
     public CollectionDTO create(CollectionDTO collectionDTO) {
 
 
@@ -256,6 +261,42 @@ public class CollectionServiceImpl implements CollectionService {
 
 
         return null;
+    }
+
+    @Override
+    public Collection peoplecreate(Integer userId,Integer code, Integer peopleId) {
+        List<Collection> collectionList = collectionRepository.findAll();
+
+        List<Collection> peoplecollectList = new ArrayList<>();
+
+        Collection collection = new Collection();
+
+        for (Collection collection1 : collectionList) {
+            if (collection1.getPeopleId() != null) {
+                peoplecollectList.add(collection1);
+            }
+        }
+
+        boolean a = true;
+
+        for (Collection collection1 : peoplecollectList) {
+            if (collection1.getUserId() == userId && collection1.getPeopleId() == peopleId) {
+                a = false;
+                collection = collection1;
+                collection.setCollectionStatus(code);
+            }
+        }
+
+        if (a) {
+            collection.setUserId(userId);
+            collection.setPeopleId(peopleId);
+            collection.setCollectionStatus(code);
+            collection.setCollectionId(collectionId);
+        }
+
+        collectionRepository.save(collection);
+
+        return collection;
     }
 
     @Override

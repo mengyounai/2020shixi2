@@ -4,6 +4,7 @@ import com.example.demo.VO.BookVO;
 import com.example.demo.VO.CommentVO;
 import com.example.demo.VO.RateVO;
 import com.example.demo.dataobject.BookInfo;
+import com.example.demo.dataobject.Collection;
 import com.example.demo.dataobject.Score;
 import com.example.demo.reposipory.BookInfoRepository;
 import com.example.demo.reposipory.ScoreRepository;
@@ -45,8 +46,9 @@ public class BookController {
     @Autowired
     private CommentService commentService;
 
-    @GetMapping("/list")
-    public List<BookVO> list(){
+    @RequestMapping("/list")
+    @ResponseBody
+    public List<BookVO> list(@RequestBody Map<String, Object> info) {
 
         //1.查询所有上架动漫
         List<BookInfo> bookInfoList=bookService.findUpAll();
@@ -54,6 +56,11 @@ public class BookController {
         List<BookVO> bookVOList=new ArrayList<>();
 
         List<Score> scoreList=scoreRepository.findAll();
+
+        String userId = info.get("userId").toString();
+        Integer userId2 = Integer.parseInt(userId);
+
+        List<BookVO> bookVOList1 = collectionService.bookcollect(userId2);
 
         List<Score> scoresum=new ArrayList<>();
         for (BookInfo bookInfo:bookInfoList){
@@ -71,6 +78,18 @@ public class BookController {
                     bookVOList.get(index).setScore(score1);
                     bookVOList.get(index).setNumber(number);
                 }
+            }
+        }
+        for (BookVO bookVO : bookVOList) {
+            for (BookVO bookVO1 : bookVOList1) {
+                if (bookVO.getBookId() == bookVO1.getBookId()) {
+                    bookVO.setCollectStatus(bookVO1.getCollectStatus());
+                }
+            }
+        }
+        for (BookVO bookVO : bookVOList) {
+            if (bookVO.getCollectStatus()!=0){
+                bookVO.setShow3(false);
             }
         }
 
@@ -100,7 +119,13 @@ public class BookController {
 
         List<Score> scoreList=scoreRepository.findAll();
 
+        String userId = info.get("userId").toString();
+        Integer userId2 = Integer.parseInt(userId);
+
+        List<BookVO> bookVOList1 = collectionService.bookcollect(userId2);
+
         List<BookInfo> bookInfoList=bookService.findOne3(bookName);
+
         List<BookVO> bookVOList=new ArrayList<>();
 
         for (BookInfo bookInfo:bookInfoList){
@@ -121,6 +146,19 @@ public class BookController {
                 }
             }
         }
+
+        for (BookVO bookVO : bookVOList) {
+            for (BookVO bookVO1 : bookVOList1) {
+                if (bookVO.getBookId() == bookVO1.getBookId()) {
+                    bookVO.setCollectStatus(bookVO1.getCollectStatus());
+                }
+            }
+        }
+        for (BookVO bookVO : bookVOList) {
+            if (bookVO.getCollectStatus()!=0){
+                bookVO.setShow3(false);
+            }
+        }
         return bookVOList;
     }
 
@@ -131,6 +169,11 @@ public class BookController {
         String time= info.get("time").toString();
 
         List<Score> scoreList=scoreRepository.findAll();
+
+        String userId = info.get("userId").toString();
+        Integer userId2 = Integer.parseInt(userId);
+
+        List<BookVO> bookVOList1 = collectionService.bookcollect(userId2);
 
         List<BookInfo> bookInfoList=bookInfoRepository.queryLike2(time);
 
@@ -155,6 +198,19 @@ public class BookController {
             }
         }
 
+        for (BookVO bookVO : bookVOList) {
+            for (BookVO bookVO1 : bookVOList1) {
+                if (bookVO.getBookId() == bookVO1.getBookId()) {
+                    bookVO.setCollectStatus(bookVO1.getCollectStatus());
+                }
+            }
+        }
+        for (BookVO bookVO : bookVOList) {
+            if (bookVO.getCollectStatus()!=0){
+                bookVO.setShow3(false);
+            }
+        }
+
         return  bookVOList;
     }
 
@@ -166,11 +222,29 @@ public class BookController {
 
         Integer bookId2=Integer.parseInt(bookId);
 
+        String userId = info.get("userId").toString();
+        Integer userId2 = Integer.parseInt(userId);
+
+        List<Collection> collectionList=collectionService.collectAll();
+
         BookInfo bookInfo=bookService.findOne(bookId2);
 
         BookVO bookVO=new BookVO();
 
         BeanUtils.copyProperties(bookInfo,bookVO);
+
+        double score=scoreService.score2(bookId2);
+
+        bookVO.setScore(score);
+
+        for (Collection collection:collectionList){
+            if (collection.getBookId()==bookId2&&collection.getUserId()==userId2){
+                bookVO.setCollectStatus(collection.getCollectionStatus());
+            }
+        }
+        if(bookVO.getCollectStatus()!=0){
+            bookVO.setShow3(false);
+        }
 
         return bookVO;
     }
@@ -239,6 +313,23 @@ public class BookController {
 
         return true;
 
+    }
+    @RequestMapping("/delcollect")
+    @ResponseBody
+    public Boolean delcollect(@RequestBody Map<String, Object> info) {
+
+        String bookId = info.get("bookId").toString();
+        Integer bookId2 = Integer.parseInt(bookId);
+
+        String userId = info.get("userId").toString();
+        Integer userId2 = Integer.parseInt(userId);
+
+        String code= info.get("code").toString();
+        Integer code2=Integer.parseInt(code);
+
+        collectionService.bookcreate(userId2,code2,bookId2);
+
+        return true;
     }
 
 

@@ -1,13 +1,18 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.VO.AnimeVO;
+import com.example.demo.VO.BookVO;
 import com.example.demo.dataobject.AnimeInfo;
 import com.example.demo.dataobject.BookInfo;
+import com.example.demo.dataobject.Collection;
 import com.example.demo.dataobject.Label;
 import com.example.demo.enums.ResultEnum;
 import com.example.demo.exception.SellException;
 import com.example.demo.reposipory.BookInfoRepository;
+import com.example.demo.reposipory.CollectionRepository;
 import com.example.demo.reposipory.LabelRepository;
 import com.example.demo.service.BookService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,9 +33,39 @@ public class BookServiceImpl implements BookService {
     @Autowired
     private LabelRepository labelRepository;
 
+    @Autowired
+    private CollectionRepository collectionRepository;
+
     @Override
     public BookInfo findOne(Integer bookId) {
         return repository.findById(bookId).orElse(null);
+    }
+
+    @Override
+    public List<BookVO> search(Integer userId,String bookName) {
+        List<Collection> collectionList=collectionRepository.findAll();
+
+        List<BookVO> bookVOList=new ArrayList<>();
+
+        List<BookInfo> bookInfoList=repository.queryLike(bookName);
+
+        for (BookInfo bookInfo:bookInfoList){
+            BookVO bookVO=new BookVO();
+            BeanUtils.copyProperties(bookInfo,bookVO);
+            bookVOList.add(bookVO);
+        }
+
+        for (BookVO bookVO:bookVOList){
+            for (Collection collection:collectionList){
+                if (bookVO.getBookId()==collection.getAnimeId()&&userId==collection.getUserId()){
+                    bookVO.setCollectStatus(collection.getCollectionStatus());
+                }
+            }
+        }
+
+
+
+        return bookVOList;
     }
 
     @Override

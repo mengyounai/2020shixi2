@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.VO.PeopleVO;
 import com.example.demo.dataobject.AnimeInfo;
 import com.example.demo.dataobject.PeopleInfo;
 import org.springframework.data.domain.Page;
@@ -17,5 +18,8 @@ public interface PeopleService {
 
     //根据动漫Id查询所有人物
     List<PeopleInfo> peopleAll(Integer animeId);
+
+    //查询人物状态查询人物列表
+    List<PeopleVO> peoplelist(Integer status);
 
 }

@@ -1,10 +1,8 @@
 package com.example.demo.controller2;
 
-import com.example.demo.VO.BookVO;
-import com.example.demo.VO.CommentVO;
-import com.example.demo.VO.MusicVO;
-import com.example.demo.VO.RateVO;
+import com.example.demo.VO.*;
 import com.example.demo.dataobject.BookInfo;
+import com.example.demo.dataobject.Collection;
 import com.example.demo.dataobject.MusicInfo;
 import com.example.demo.dataobject.Score;
 import com.example.demo.reposipory.MusicInfoRespository;
@@ -47,13 +45,19 @@ public class MusicController {
     @Autowired
     private CommentService commentService;
 
-    @GetMapping("/list")
-    public List<MusicVO> list(){
+    @RequestMapping("/list")
+    @ResponseBody
+    public List<MusicVO> list(@RequestBody Map<String, Object> info) {
 
         //1.查询所有上架动漫
         List<MusicInfo> musicInfoList=musicService.findUpAll();
 
         List<MusicVO> musicVOList=new ArrayList<>();
+
+        String userId = info.get("userId").toString();
+        Integer userId2 = Integer.parseInt(userId);
+
+        List<MusicVO> musicVOList1 = collectionService.musiccollect(userId2);
 
         List<Score> scoreList=scoreRepository.findAll();
 
@@ -73,6 +77,19 @@ public class MusicController {
                     musicVOList.get(index).setScore(score1);
                     musicVOList.get(index).setNumber(number);
                 }
+            }
+        }
+
+        for (MusicVO musicVO : musicVOList) {
+            for (MusicVO musicVO1 : musicVOList1) {
+                if (musicVO.getMusicId() == musicVO1.getMusicId()) {
+                    musicVO.setCollectStatus(musicVO1.getCollectStatus());
+                }
+            }
+        }
+        for (MusicVO musicVO : musicVOList) {
+            if (musicVO.getCollectStatus()!=0){
+                musicVO.setShow3(false);
             }
         }
 
@@ -102,7 +119,13 @@ public class MusicController {
 
         List<Score> scoreList=scoreRepository.findAll();
 
+        String userId = info.get("userId").toString();
+        Integer userId2 = Integer.parseInt(userId);
+
+        List<MusicVO> musicVOList1 = collectionService.musiccollect(userId2);
+
         List<MusicInfo> musicInfoList=musicService.findOne3(bookName);
+
         List<MusicVO> musicVOList=new ArrayList<>();
 
         for (MusicInfo musicInfo:musicInfoList){
@@ -123,6 +146,19 @@ public class MusicController {
                 }
             }
         }
+
+        for (MusicVO musicVO : musicVOList) {
+            for (MusicVO musicVO1 : musicVOList1) {
+                if (musicVO.getMusicId() == musicVO1.getMusicId()) {
+                    musicVO.setCollectStatus(musicVO1.getCollectStatus());
+                }
+            }
+        }
+        for (MusicVO musicVO : musicVOList) {
+            if (musicVO.getCollectStatus()!=0){
+                musicVO.setShow3(false);
+            }
+        }
         return musicVOList;
     }
 
@@ -133,6 +169,11 @@ public class MusicController {
         String time= info.get("time").toString();
 
         List<Score> scoreList=scoreRepository.findAll();
+
+        String userId = info.get("userId").toString();
+        Integer userId2 = Integer.parseInt(userId);
+
+        List<MusicVO> musicVOList1 = collectionService.musiccollect(userId2);
 
         List<MusicInfo> musicInfoList=musicInfoRepository.queryLike2(time);
 
@@ -157,6 +198,19 @@ public class MusicController {
             }
         }
 
+        for (MusicVO musicVO : musicVOList) {
+            for (MusicVO musicVO1 : musicVOList1) {
+                if (musicVO.getMusicId() == musicVO1.getMusicId()) {
+                    musicVO.setCollectStatus(musicVO1.getCollectStatus());
+                }
+            }
+        }
+        for (MusicVO musicVO : musicVOList) {
+            if (musicVO.getCollectStatus()!=0){
+                musicVO.setShow3(false);
+            }
+        }
+
         return  musicVOList;
     }
 
@@ -168,11 +222,29 @@ public class MusicController {
 
         Integer musicId2=Integer.parseInt(musicId);
 
+        String userId = info.get("userId").toString();
+        Integer userId2 = Integer.parseInt(userId);
+
+        List<Collection> collectionList=collectionService.collectAll();
+
         MusicInfo musicInfo=musicService.findOne(musicId2);
 
         MusicVO musicVO=new MusicVO();
 
         BeanUtils.copyProperties(musicInfo,musicVO);
+
+        double score=scoreService.score3(musicId2);
+
+        musicVO.setScore(score);
+
+        for (Collection collection:collectionList){
+            if (collection.getMusicId()==musicId2&&collection.getUserId()==userId2){
+                musicVO.setCollectStatus(collection.getCollectionStatus());
+            }
+        }
+        if(musicVO.getCollectStatus()!=0){
+            musicVO.setShow3(false);
+        }
 
         return musicVO;
     }
@@ -241,6 +313,24 @@ public class MusicController {
 
         return true;
 
+    }
+
+    @RequestMapping("/delcollect")
+    @ResponseBody
+    public Boolean delcollect(@RequestBody Map<String, Object> info) {
+
+        String musicId = info.get("musicId").toString();
+        Integer musicId2 = Integer.parseInt(musicId);
+
+        String userId = info.get("userId").toString();
+        Integer userId2 = Integer.parseInt(userId);
+
+        String code= info.get("code").toString();
+        Integer code2=Integer.parseInt(code);
+
+        collectionService.musiccreate(userId2,code2,musicId2);
+
+        return true;
     }
 
 

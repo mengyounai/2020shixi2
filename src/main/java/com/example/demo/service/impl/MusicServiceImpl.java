@@ -1,12 +1,18 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.VO.AnimeVO;
+import com.example.demo.VO.MusicVO;
+import com.example.demo.dataobject.AnimeInfo;
+import com.example.demo.dataobject.Collection;
 import com.example.demo.dataobject.Label;
 import com.example.demo.dataobject.MusicInfo;
 import com.example.demo.enums.ResultEnum;
 import com.example.demo.exception.SellException;
+import com.example.demo.reposipory.CollectionRepository;
 import com.example.demo.reposipory.LabelRepository;
 import com.example.demo.reposipory.MusicInfoRespository;
 import com.example.demo.service.MusicService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,9 +33,39 @@ public class MusicServiceImpl implements MusicService {
     @Autowired
     private LabelRepository labelRepository;
 
+    @Autowired
+    private CollectionRepository collectionRepository;
+
     @Override
     public MusicInfo findOne(Integer musicId) {
         return repository.findById(musicId).orElse(null);
+    }
+
+    @Override
+    public List<MusicVO> search(Integer userId,String musicName) {
+        List<Collection> collectionList=collectionRepository.findAll();
+
+        List<MusicVO> musicVOList=new ArrayList<>();
+
+        List<MusicInfo> musicInfoList=repository.queryLike(musicName);
+
+        for (MusicInfo musicInfo:musicInfoList){
+            MusicVO musicVO=new MusicVO();
+            BeanUtils.copyProperties(musicInfo,musicVO);
+            musicVOList.add(musicVO);
+        }
+
+        for (MusicVO musicVO:musicVOList){
+            for (Collection collection:collectionList){
+                if (musicVO.getMusicId()==collection.getMusicId()&&userId==collection.getUserId()){
+                    musicVO.setCollectStatus(collection.getCollectionStatus());
+                }
+            }
+        }
+
+
+
+        return musicVOList;
     }
 
     @Override

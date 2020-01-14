@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.VO.AnimeVO;
 import com.example.demo.dataobject.AnimeInfo;
 import com.example.demo.dataobject.Collection;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,9 @@ public interface AnimeService {
 
     //根据id查询动漫
     AnimeInfo findOne(Integer animeId);
+
+    //模糊查询动漫
+    List<AnimeVO> search(Integer userId,String animeName);
 
     //根据类型查询动漫
     List<AnimeInfo> findOne2(Integer labelType);

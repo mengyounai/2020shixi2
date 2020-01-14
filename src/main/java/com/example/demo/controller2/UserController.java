@@ -2,6 +2,7 @@ package com.example.demo.controller2;
 
 import com.example.demo.VO.UserVO;
 import com.example.demo.dataobject.PeopleInfo;
+import com.example.demo.dataobject.UserInfo;
 import com.example.demo.reposipory.UserInfoRespository;
 import com.example.demo.service.UserService;
 import io.swagger.annotations.Api;
@@ -77,6 +78,34 @@ public class UserController {
         String password2= info.get("password2").toString();
 
         Boolean a=userService.password(userId2,email,password1,password2);
+
+        return a;
+
+    }
+
+    @RequestMapping("/register")
+    @ResponseBody
+    public Boolean register(@RequestBody Map<String, Object> info){
+
+        String email= info.get("email").toString();
+
+        String username= info.get("username").toString();
+
+        String password1= info.get("password1").toString();
+
+        List<UserInfo> userInfoList=userInfoRespository.findAll();
+
+        boolean a=true;
+        for (UserInfo userInfo:userInfoList){
+            if (userInfo.getUserName()==username){
+                a=false;
+                break;
+            }else {
+                userService.register(username,email,password1);
+                a=true;
+            }
+        }
+
 
         return a;
 

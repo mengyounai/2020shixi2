@@ -106,6 +106,8 @@ public class CommentServiceImpl implements CommentService {
 
         List<CommentVO> commentVOList = new ArrayList<>();
 
+        List<CommentVO> commentVOList2 = new ArrayList<>();
+
         List<Comment> commentList = commentService.animeAll(animeId);
         for (Comment comment : commentList) {
             UserInfo userInfo = new UserInfo();
@@ -115,11 +117,19 @@ public class CommentServiceImpl implements CommentService {
             commentVO.setUserIcon(userInfo.getUserIcon());
             commentVO.setUserName(userInfo.getUserName());
             commentVOList.add(commentVO);
+        }
+        for (CommentVO commentVO : commentVOList) {
+            CommentVO commentVO2 = new CommentVO();
+            if (commentVO.getCommentDescription() == null || commentVO.getCommentDescription().equalsIgnoreCase("")) {
 
+            } else {
+                commentVO2 = commentVO;
+                commentVOList2.add(commentVO2);
+            }
         }
 
 
-        return commentVOList;
+        return commentVOList2;
     }
 
     @Override
@@ -162,6 +172,8 @@ public class CommentServiceImpl implements CommentService {
     public List<CommentVO> bookAll2(Integer bookId) {
         List<CommentVO> commentVOList = new ArrayList<>();
 
+        List<CommentVO> commentVOList2 = new ArrayList<>();
+
         List<Comment> commentList = commentService.bookAll(bookId);
         for (Comment comment : commentList) {
             UserInfo userInfo = new UserInfo();
@@ -173,9 +185,18 @@ public class CommentServiceImpl implements CommentService {
             commentVOList.add(commentVO);
 
         }
+        for (CommentVO commentVO : commentVOList) {
+            CommentVO commentVO2 = new CommentVO();
+            if (commentVO.getCommentDescription() == null || commentVO.getCommentDescription().equalsIgnoreCase("")) {
 
+            } else {
+                commentVO2 = commentVO;
+                commentVOList2.add(commentVO2);
+            }
+        }
 
-        return commentVOList;
+        return commentVOList2;
+
     }
 
     @Override
@@ -205,7 +226,6 @@ public class CommentServiceImpl implements CommentService {
 
         commentRepository.save(comment1);
 
-
         return comment1;
     }
 
@@ -216,23 +236,85 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentVO> musicAll2(Integer musicId) {
-        List<CommentVO> commentVOList=new ArrayList<>();
+        List<CommentVO> commentVOList = new ArrayList<>();
 
-        List<Comment> commentList=commentService.musicAll(musicId);
-        for (Comment comment:commentList){
-            UserInfo userInfo=new UserInfo();
-            CommentVO commentVO=new CommentVO();
-            userInfo=userService.findbyuserId(comment.getUserId());
-            BeanUtils.copyProperties(comment,commentVO);
+        List<CommentVO> commentVOList2 = new ArrayList<>();
+
+        List<Comment> commentList = commentService.musicAll(musicId);
+        for (Comment comment : commentList) {
+            UserInfo userInfo = new UserInfo();
+            CommentVO commentVO = new CommentVO();
+            userInfo = userService.findbyuserId(comment.getUserId());
+            BeanUtils.copyProperties(comment, commentVO);
             commentVO.setUserIcon(userInfo.getUserIcon());
             commentVO.setUserName(userInfo.getUserName());
             commentVOList.add(commentVO);
 
         }
+        for (CommentVO commentVO : commentVOList) {
+            CommentVO commentVO2 = new CommentVO();
+            if (commentVO.getCommentDescription() == null || commentVO.getCommentDescription().equalsIgnoreCase("")) {
+
+            } else {
+                commentVO2 = commentVO;
+                commentVOList2.add(commentVO2);
+            }
+        }
+
+        return commentVOList2;
 
 
-        return commentVOList;
+    }
 
+    @Override
+    public Comment peoplecreate(Integer userId, Integer peopleId, String comment) {
+
+        Comment comment1 = new Comment();
+
+        comment1.setCommentId(commentId);
+        comment1.setUserId(userId);
+        comment1.setPeopleId(peopleId);
+        comment1.setCommentStatus(1);
+        comment1.setCommentDescription(comment);
+
+        commentRepository.save(comment1);
+
+        return comment1;
+    }
+
+    @Override
+    public List<Comment> peopleAll(Integer peopleId) {
+        return commentRepository.findByPeopleId(peopleId);
+    }
+
+    @Override
+    public List<CommentVO> peopleAll2(Integer peopleId) {
+        List<CommentVO> commentVOList = new ArrayList<>();
+
+        List<CommentVO> commentVOList2 = new ArrayList<>();
+
+        List<Comment> commentList = commentService.peopleAll(peopleId);
+        for (Comment comment : commentList) {
+            UserInfo userInfo = new UserInfo();
+            CommentVO commentVO = new CommentVO();
+            userInfo = userService.findbyuserId(comment.getUserId());
+            BeanUtils.copyProperties(comment, commentVO);
+            commentVO.setUserIcon(userInfo.getUserIcon());
+            commentVO.setUserName(userInfo.getUserName());
+            commentVOList.add(commentVO);
+
+        }
+        for (CommentVO commentVO : commentVOList) {
+            CommentVO commentVO2 = new CommentVO();
+            if (commentVO.getCommentDescription() == null || commentVO.getCommentDescription().equalsIgnoreCase("")) {
+
+            } else {
+                commentVO2 = commentVO;
+                commentVOList2.add(commentVO2);
+            }
+        }
+
+        return commentVOList2;
     }
 
     @Override

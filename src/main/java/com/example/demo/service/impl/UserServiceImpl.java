@@ -121,4 +121,17 @@ public class UserServiceImpl implements UserService {
         return a;
 
     }
+
+    @Override
+    public Boolean register(String username, String email, String password) {
+
+        UserInfo userInfo=new UserInfo();
+        userInfo.setUserEmail(email);
+        userInfo.setUserName(username);
+        userInfo.setUserPassword(password);
+
+        respository.save(userInfo);
+
+        return true;
+    }
 }

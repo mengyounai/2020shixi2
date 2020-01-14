@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import com.example.demo.VO.MusicVO;
+import com.example.demo.dataobject.AnimeInfo;
 import com.example.demo.dataobject.MusicInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +12,9 @@ public interface MusicService {
 
     //根据id查询音乐
     MusicInfo findOne(Integer musicId);
+
+    //模糊查询音乐
+    List<MusicVO> search(Integer userId,String musicName);
 
     //根据类型查询音乐
     List<MusicInfo> findOne2(Integer labelType);

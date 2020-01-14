@@ -1,27 +1,17 @@
-package com.example.demo.dataobject;
+package com.example.demo.VO;
 
 import com.example.demo.enums.ProductStatusEnum;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.Proxy;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import java.io.Serializable;
 import java.util.Date;
 
-@Entity
-@Proxy(lazy = false)
 @Data
-@DynamicInsert
-@DynamicUpdate
-public class PeopleInfo implements Serializable {
+public class PeopleVO {
 
-    @Id
     private Integer peopleId;
 
+    @JsonProperty("name")
     private String peopleName;
 
     private String peopleIcon;
@@ -30,6 +20,7 @@ public class PeopleInfo implements Serializable {
 
     private String peopleSex;
 
+    @JsonProperty("time")
     private String peopleBirthday;
 
     private String peopleHeight;
@@ -42,7 +33,9 @@ public class PeopleInfo implements Serializable {
 
     private String peopleDescription;
 
-    private Integer peopleStatus= ProductStatusEnum.UP.getCode();
+    private Integer peopleStatus;
+
+    private Integer collectStatus=0;
 
     private Date createTime;
 

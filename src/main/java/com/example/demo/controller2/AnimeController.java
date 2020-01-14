@@ -44,35 +44,53 @@ public class AnimeController {
     @Autowired
     private PeopleService peopleService;
 
-    @GetMapping("/list")
-    public List<AnimeVO> list(){
+    @RequestMapping("/list")
+    @ResponseBody
+    public List<AnimeVO> list(@RequestBody Map<String, Object> info) {
 
         //1.查询所有上架动漫
-        List<AnimeInfo> animeInfoList=animeService.findUpAll();
+        List<AnimeInfo> animeInfoList = animeService.findUpAll();
 
-        List<AnimeVO> animeVOList=new ArrayList<>();
+        List<AnimeVO> animeVOList = new ArrayList<>();
 
-        List<Score> scoreList=scoreRepository.findAll();
+        List<Score> scoreList = scoreRepository.findAll();
 
-        List<Score> scoresum=new ArrayList<>();
-        for (AnimeInfo animeInfo:animeInfoList){
-            AnimeVO animeVO=new AnimeVO();
-            BeanUtils.copyProperties(animeInfo,animeVO);
+        String userId = info.get("userId").toString();
+        Integer userId2 = Integer.parseInt(userId);
+
+        List<AnimeVO> animeVOList1 = collectionService.animecollect(userId2);
+
+        List<Score> scoresum = new ArrayList<>();
+        for (AnimeInfo animeInfo : animeInfoList) {
+            AnimeVO animeVO = new AnimeVO();
+            BeanUtils.copyProperties(animeInfo, animeVO);
             animeVOList.add(animeVO);
         }
-        Integer index=-1;
-        for (AnimeVO animeVO:animeVOList){
+        Integer index = -1;
+        for (AnimeVO animeVO : animeVOList) {
             index++;
-            for (Score score:scoreList){
-                if (animeVO.getAnimeId()==score.getAnimeId()){
-                    double score1=scoreService.score(animeVO.getAnimeId());
-                    Integer number=scoreRepository.findByAnimeId(animeVO.getAnimeId()).size();
+            for (Score score : scoreList) {
+                if (animeVO.getAnimeId() == score.getAnimeId()) {
+                    double score1 = scoreService.score(animeVO.getAnimeId());
+                    Integer number = scoreRepository.findByAnimeId(animeVO.getAnimeId()).size();
                     animeVOList.get(index).setScore(score1);
                     animeVOList.get(index).setNumber(number);
                 }
             }
         }
 
+        for (AnimeVO animeVO : animeVOList) {
+            for (AnimeVO animeVO1 : animeVOList1) {
+                if (animeVO.getAnimeId() == animeVO1.getAnimeId()) {
+                    animeVO.setCollectStatus(animeVO1.getCollectStatus());
+                }
+            }
+        }
+        for (AnimeVO animeVO : animeVOList) {
+            if (animeVO.getCollectStatus()!=0){
+                animeVO.setShow3(false);
+            }
+        }
         return animeVOList;
     }
 
@@ -113,6 +131,11 @@ public class AnimeController {
 
         List<Score> scoreList=scoreRepository.findAll();
 
+        String userId = info.get("userId").toString();
+        Integer userId2 = Integer.parseInt(userId);
+
+        List<AnimeVO> animeVOList1 = collectionService.animecollect(userId2);
+
         List<AnimeInfo> animeInfoList=animeService.findOne3(bookName);
         List<AnimeVO> animeVOList=new ArrayList<>();
 
@@ -134,6 +157,18 @@ public class AnimeController {
                 }
             }
         }
+        for (AnimeVO animeVO : animeVOList) {
+            for (AnimeVO animeVO1 : animeVOList1) {
+                if (animeVO.getAnimeId() == animeVO1.getAnimeId()) {
+                    animeVO.setCollectStatus(animeVO1.getCollectStatus());
+                }
+            }
+        }
+        for (AnimeVO animeVO : animeVOList) {
+            if (animeVO.getCollectStatus()!=0){
+                animeVO.setShow3(false);
+            }
+        }
 
         return animeVOList;
     }
@@ -147,6 +182,11 @@ public class AnimeController {
         List<Score> scoreList=scoreRepository.findAll();
 
         List<AnimeInfo> animeInfoList=animeInfoRepository.queryLike2(time);
+
+        String userId = info.get("userId").toString();
+        Integer userId2 = Integer.parseInt(userId);
+
+        List<AnimeVO> animeVOList1 = collectionService.animecollect(userId2);
 
         List<AnimeVO> animeVOList=new ArrayList<>();
 
@@ -168,6 +208,18 @@ public class AnimeController {
                 }
             }
         }
+        for (AnimeVO animeVO : animeVOList) {
+            for (AnimeVO animeVO1 : animeVOList1) {
+                if (animeVO.getAnimeId() == animeVO1.getAnimeId()) {
+                    animeVO.setCollectStatus(animeVO1.getCollectStatus());
+                }
+            }
+        }
+        for (AnimeVO animeVO : animeVOList) {
+            if (animeVO.getCollectStatus()!=0){
+                animeVO.setShow3(false);
+            }
+        }
 
         return  animeVOList;
     }
@@ -180,6 +232,11 @@ public class AnimeController {
 
         Integer animeId2=Integer.parseInt(animeId);
 
+        String userId = info.get("userId").toString();
+        Integer userId2 = Integer.parseInt(userId);
+
+        List<Collection> collectionList=collectionService.collectAll();
+
         AnimeInfo animeInfo=animeService.findOne(animeId2);
 
         AnimeVO animeVO=new AnimeVO();
@@ -189,6 +246,15 @@ public class AnimeController {
         double score=scoreService.score(animeId2);
 
         animeVO.setScore(score);
+
+        for (Collection collection:collectionList){
+            if (collection.getAnimeId()==animeId2&&collection.getUserId()==userId2){
+                animeVO.setCollectStatus(collection.getCollectionStatus());
+            }
+        }
+        if(animeVO.getCollectStatus()!=0){
+            animeVO.setShow3(false);
+        }
 
         return animeVO;
     }
@@ -257,5 +323,22 @@ public class AnimeController {
 
         return true;
 
+    }
+    @RequestMapping("/delcollect")
+    @ResponseBody
+    public Boolean delcollect(@RequestBody Map<String, Object> info) {
+
+        String animeId = info.get("animeId").toString();
+        Integer animeId2 = Integer.parseInt(animeId);
+
+        String userId = info.get("userId").toString();
+        Integer userId2 = Integer.parseInt(userId);
+
+        String code= info.get("code").toString();
+        Integer code2=Integer.parseInt(code);
+
+        collectionService.animecreate(userId2,code2,animeId2);
+
+        return true;
     }
 }

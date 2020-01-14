@@ -1,14 +1,18 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.VO.AnimeVO;
 import com.example.demo.dataobject.AnimeInfo;
 import com.example.demo.dataobject.Collection;
 import com.example.demo.dataobject.Label;
 import com.example.demo.enums.ResultEnum;
 import com.example.demo.exception.SellException;
 import com.example.demo.reposipory.AnimeInfoRepository;
+import com.example.demo.reposipory.CollectionRepository;
 import com.example.demo.reposipory.LabelRepository;
 import com.example.demo.service.AnimeService;
+import com.example.demo.service.CollectionService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,9 +34,44 @@ public class AnimeServiceImpl implements AnimeService {
     @Autowired
     private LabelRepository labelRepository;
 
+    @Autowired
+    private CollectionService collectionService;
+
+    @Autowired
+    private CollectionRepository collectionRepository;
+
+
     @Override
     public AnimeInfo findOne(Integer animeId) {
         return repository.findById(animeId).orElse(null);
+    }
+
+    @Override
+    public List<AnimeVO> search(Integer userId,String animeName) {
+
+        List<Collection> collectionList=collectionRepository.findAll();
+
+        List<AnimeVO> animeVOList=new ArrayList<>();
+
+        List<AnimeInfo> animeInfoList=repository.queryLike(animeName);
+
+        for (AnimeInfo animeInfo:animeInfoList){
+            AnimeVO animeVO=new AnimeVO();
+            BeanUtils.copyProperties(animeInfo,animeVO);
+            animeVOList.add(animeVO);
+        }
+
+        for (AnimeVO animeVO:animeVOList){
+            for (Collection collection:collectionList){
+                if (animeVO.getAnimeId()==collection.getAnimeId()&&userId==collection.getUserId()){
+                    animeVO.setCollectStatus(collection.getCollectionStatus());
+                }
+        }
+        }
+
+
+
+        return animeVOList;
     }
 
     @Override

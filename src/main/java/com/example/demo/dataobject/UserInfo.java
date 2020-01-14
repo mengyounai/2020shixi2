@@ -5,8 +5,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Proxy;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -17,6 +16,7 @@ import java.util.Date;
 public class UserInfo {
 
     @Id
+    @GeneratedValue(strategy= GenerationType.SEQUENCE,generator="userInfo")
     private Integer userId;
 
     private String userName;

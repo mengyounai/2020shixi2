@@ -54,6 +54,19 @@ public interface CommentService  {
     List<CommentVO>  musicAll2(Integer musicId);
 
 
+    //人物
+
+    //发表人物评论真
+    Comment peoplecreate(Integer userId,Integer peopleId,String comment);
+
+    //查询单个人物所有评论
+    List<Comment> peopleAll(Integer peopleId);
+
+    //查询单个人物所有评论
+    List<CommentVO>  peopleAll2(Integer peopleId);
+
+
+
 
     //查询所有动漫评论
     Page<Comment> findAll(Integer animeId, Pageable pageable);

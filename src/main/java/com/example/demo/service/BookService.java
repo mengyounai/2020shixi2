@@ -1,6 +1,8 @@
 package com.example.demo.service;
 
 
+import com.example.demo.VO.BookVO;
+import com.example.demo.dataobject.AnimeInfo;
 import com.example.demo.dataobject.BookInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +13,9 @@ public interface BookService {
 
     //根据id查询书籍
     BookInfo findOne(Integer bookId);
+
+    //模糊查询书籍
+    List<BookVO> search(Integer userId,String bookName);
 
     //根据类型查询动漫
     List<BookInfo> findOne2(Integer labelType);

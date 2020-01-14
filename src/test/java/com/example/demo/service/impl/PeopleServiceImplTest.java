@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.VO.PeopleVO;
 import com.example.demo.dataobject.PeopleInfo;
 import com.example.demo.service.PeopleService;
 import lombok.extern.slf4j.Slf4j;
@@ -43,4 +44,13 @@ public class PeopleServiceImplTest {
             System.out.println(peopleInfo.getPeopleName());
         }
     }
+
+    @Test
+    public void peoplelist(){
+        List<PeopleVO> peopleInfoList=peopleService.peoplelist(2);
+        for (PeopleVO peopleInfo:peopleInfoList){
+            System.out.println(peopleInfo);
+        }
+    }
+
 }

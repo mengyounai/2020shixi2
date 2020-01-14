@@ -28,8 +28,6 @@ public interface AnimeInfoRepository extends JpaRepository<AnimeInfo,Integer> {
     //根据动画出版时间查询动画
     public List<AnimeInfo> findByAnimeTime(String time);
 
-
-
     @Query("select p from AnimeInfo p where p.animeName like %:name%")
     public List<AnimeInfo> queryLike(@Param("name") String name);
 

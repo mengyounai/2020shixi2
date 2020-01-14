@@ -28,4 +28,7 @@ public interface UserService {
 
     //修改密码
     Boolean password(Integer userId, String email,String password1,String password2);
+
+    //注册用户
+    Boolean register(String username,String email,String password);
 }

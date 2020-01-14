@@ -26,4 +26,6 @@ public interface CommentRepository extends JpaRepository<Comment,Integer> {
         List<Comment> findByBookId(Integer bookId);
 
         List<Comment> findByMusicId(Integer musicId);
+
+        List<Comment> findByPeopleId(Integer peopleId);
 }
