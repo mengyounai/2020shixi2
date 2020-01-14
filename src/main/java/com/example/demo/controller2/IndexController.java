@@ -1,10 +1,7 @@
 package com.example.demo.controller2;
 
 
-import com.example.demo.VO.AnimeVO;
-import com.example.demo.VO.BookVO;
-import com.example.demo.VO.IndexVO;
-import com.example.demo.VO.MusicVO;
+import com.example.demo.VO.*;
 import com.example.demo.dataobject.AnimeInfo;
 import com.example.demo.dataobject.BookInfo;
 import com.example.demo.dataobject.MusicInfo;
@@ -53,6 +50,10 @@ public class IndexController {
 
         List<MusicVO> musicInfoList3=new ArrayList<>();
 
+        List<PeopleVO> peopleInfoList=collectionService.peoplecollect(userId2);
+
+        List<PeopleVO> peopleInfoList2=new ArrayList<>();
+
         IndexVO indexVO=new IndexVO();
 
         for (AnimeVO animeVO:animeInfoList){
@@ -91,6 +92,14 @@ public class IndexController {
             }
         }
 
+        for (PeopleVO peopleVO:peopleInfoList){
+            if (peopleVO.getCollectStatus()==1){
+                PeopleVO peopleVO1=new PeopleVO();
+                peopleVO1=peopleVO;
+                peopleInfoList2.add(peopleVO1);
+            }
+        }
+
         indexVO.setAnimeInfoList1(animeInfoList2);
 
         indexVO.setAnimeInfoList2(animeInfoList3);
@@ -103,6 +112,7 @@ public class IndexController {
 
         indexVO.setMusicInfoList2(musicInfoList3);
 
+        indexVO.setPeopleVOList(peopleInfoList2);
 
 
 

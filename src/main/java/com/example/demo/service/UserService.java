@@ -31,4 +31,7 @@ public interface UserService {
 
     //注册用户
     Boolean register(String username,String email,String password);
+
+    //用户登录
+    Boolean login(String username,String password);
 }

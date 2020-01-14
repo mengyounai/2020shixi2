@@ -3,6 +3,7 @@ package com.example.demo.service.impl;
 import com.example.demo.VO.AnimeVO;
 import com.example.demo.VO.BookVO;
 import com.example.demo.VO.MusicVO;
+import com.example.demo.VO.PeopleVO;
 import com.example.demo.conveter.Collection2CollectionDTOConveter;
 import com.example.demo.dataobject.*;
 import com.example.demo.dto.CollectionDTO;
@@ -13,10 +14,7 @@ import com.example.demo.reposipory.AnimeInfoRepository;
 import com.example.demo.reposipory.BookInfoRepository;
 import com.example.demo.reposipory.CollectionRepository;
 import com.example.demo.reposipory.DetailRepository;
-import com.example.demo.service.AnimeService;
-import com.example.demo.service.BookService;
-import com.example.demo.service.CollectionService;
-import com.example.demo.service.MusicService;
+import com.example.demo.service.*;
 import com.example.demo.util.KeyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -57,6 +55,9 @@ public class CollectionServiceImpl implements CollectionService {
 
     @Autowired
     private MusicService musicService;
+
+    @Autowired
+    private PeopleService peopleService;
 
     @Autowired
     private BookInfoRepository bookInfoRepository;
@@ -564,6 +565,26 @@ public class CollectionServiceImpl implements CollectionService {
         }
 
         return musicVOList;
+    }
+
+    @Override
+    public List<PeopleVO> peoplecollect(Integer userId) {
+        List<Collection> collectionList = collectionRepository.findByUserId(userId);
+
+        List<PeopleVO> peopleVOList=new ArrayList<>();
+
+        for (Collection collection : collectionList) {
+            if (collection.getPeopleId() != null) {
+                PeopleVO peopleVO=new PeopleVO();
+                PeopleInfo peopleInfo = peopleService.findOne(collection.getPeopleId());
+                BeanUtils.copyProperties(peopleInfo,peopleVO);
+                peopleVO.setCollectStatus(collection.getCollectionStatus());
+                peopleVOList.add(peopleVO);
+
+            }
+        }
+
+        return peopleVOList;
     }
 
 

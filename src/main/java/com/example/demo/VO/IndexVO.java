@@ -21,4 +21,6 @@ public class IndexVO {
     List<BookVO> bookInfoList2;
 
     List<MusicVO> musicInfoList2;
+
+    List<PeopleVO> peopleVOList;
 }

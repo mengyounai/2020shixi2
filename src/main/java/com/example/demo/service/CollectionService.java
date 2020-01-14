@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.VO.AnimeVO;
 import com.example.demo.VO.BookVO;
 import com.example.demo.VO.MusicVO;
+import com.example.demo.VO.PeopleVO;
 import com.example.demo.dataobject.*;
 import com.example.demo.dto.CollectionDTO;
 import org.springframework.data.domain.Page;
@@ -85,6 +86,9 @@ public interface CollectionService {
 
     //查询单个用户所有音乐收藏
     List<MusicVO> musiccollect(Integer userId);
+
+    //查询单个用户所有人物收藏
+    List<PeopleVO> peoplecollect(Integer userId);
 
 
 

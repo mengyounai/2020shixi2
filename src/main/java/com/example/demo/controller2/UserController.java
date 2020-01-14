@@ -97,17 +97,45 @@ public class UserController {
 
         boolean a=true;
         for (UserInfo userInfo:userInfoList){
-            if (userInfo.getUserName()==username){
+            if (userInfo.getUserName().equalsIgnoreCase(username)){
                 a=false;
                 break;
             }else {
-                userService.register(username,email,password1);
                 a=true;
             }
+        }
+        if (a){
+            userService.register(username,email,password1);
         }
 
 
         return a;
 
+    }
+
+    @RequestMapping("/login")
+    @ResponseBody
+    public Boolean login(@RequestBody Map<String, Object> info){
+
+        String username= info.get("username").toString();
+
+        String password= info.get("password").toString();
+
+        List<UserInfo> userInfoList=userInfoRespository.findAll();
+
+        boolean a=userService.login(username,password);
+
+        return a;
+
+    }
+
+    @RequestMapping("/info")
+    @ResponseBody
+    public UserInfo userInfo(@RequestBody Map<String, Object> info){
+
+        String username= info.get("username").toString();
+
+        UserInfo userInfo=userInfoRespository.findByUserName(username);
+        return userInfo;
     }
 }

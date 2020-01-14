@@ -12,5 +12,8 @@ public interface UserInfoRespository extends JpaRepository<UserInfo,Integer> {
     //根据用户id查询用户
     UserInfo findByUserId(Integer userId);
 
+    //根据用户名查询用户
+    UserInfo findByUserName(String username);
+
 
 }

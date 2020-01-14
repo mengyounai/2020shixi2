@@ -16,7 +16,6 @@ import java.util.Date;
 public class UserInfo {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.SEQUENCE,generator="userInfo")
     private Integer userId;
 
     private String userName;
